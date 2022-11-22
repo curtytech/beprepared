@@ -1,0 +1,23 @@
+Link do Tutorial de instalação do nativewind
+https://www.nativewind.dev/quick-starts/expo
+
+Criar projeto
+npx create-expo-app beprepared
+
+// Instalar NativeWind -- não funciona no powershell
+yarn add nativewind
+
+// Criar o arquivo de configuração
+npx tailwindcss init
+
+// O Content do tailwind.config.js deve ficar assim
+content: ["./App.{js,jsx,ts,tsx}", "./<custom directory>/**/*.{js,jsx,ts,tsx}"],
+
+// O plugins do babel.config.js deve ficar assim
+plugins: ["nativewind/babel"],
+
+// Resolver erros do nativewind
+npm install
+
+// Iniciar projeto
+npm start
