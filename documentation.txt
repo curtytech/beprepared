@@ -19,5 +19,15 @@ plugins: ["nativewind/babel"],
 // Resolver erros do nativewind
 npm install
 
+
+// Intalar Navigation
+npm install @react-navigation/native
+npx expo install react-native-screens react-native-safe-area-context
+
+// Intalar Stack
+npm install @react-navigation/native-stack
+
+
+
 // Iniciar projeto
 npm start

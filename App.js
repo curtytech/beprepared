@@ -6,30 +6,43 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import TodayTasks from "./components/TodayTasks";
 
-export default function App() {
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import Home from "./components/Home";
+import TomorrowTasks from "./components/TomorrowTasks";
+import PastTasks from "./components/PastTasks";
+import Login from "./components/Login";
+
+export default function App(props) {
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View className="flex-1 items-center justify-center bg-sky-100">
-   
-      <TodayTasks></TodayTasks>
-
-      <View className="flex-row justify-between items-center my-1">
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-3 mt-5 mr-14">
-          <Text className="text-white font-bold">Tarefas Passadas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-3 mt-5">
-          <Text className="text-white font-bold">Lista de Amanhã</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className="flex-row justify-between items-center my-1">
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-4 mt-3">
-          <Text className="text-white font-bold">Nova Tarefa</Text>
-        </TouchableOpacity>
-      </View>
-
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          options={{ title: "Tarefas de Hoje" }}
+          component={Home}
+        />
+        <Stack.Screen
+          name="TomorrowTasks"
+          options={{ title: "Tarefas de Amanhã" }}
+          component={TomorrowTasks}
+        />
+        <Stack.Screen
+          name="PastTasks"
+          options={{ title: "Tarefas Passadas" }}
+          component={PastTasks}
+        />
+        <Stack.Screen
+          name="Login"
+          options={{ title: "Login",
+        headerShown: false }}
+          component={Login}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
