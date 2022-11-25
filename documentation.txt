@@ -27,7 +27,32 @@ npx expo install react-native-screens react-native-safe-area-context
 // Intalar Stack
 npm install @react-navigation/native-stack
 
+//API
+//Instalar Node express
+npm install express --save
+//Instalar Cors
+npm install cors --save
 
+//Sequelize 
+npm install --save sequelize mysql2
+
+npm install --save sequelize-cli
+
+npx sequelize-cli init
+
+
+//Instalar Nodemon
+npm install --save-dev nodemon
+
+//Iniciar Nodemon
+npx nodemon run Controller.js
+
+// Instalar asyncStorage Manter variaveis de sessao em cache
+npx expo install @react-native-async-storage/async-storage
+
+npm install @react-native-async-storage/async-storage
 
 // Iniciar projeto
 npm start
+
+

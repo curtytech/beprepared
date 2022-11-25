@@ -14,9 +14,40 @@ import Home from "./components/Home";
 import TomorrowTasks from "./components/TomorrowTasks";
 import PastTasks from "./components/PastTasks";
 import Login from "./components/Login";
+import Tasks from "./components/Tasks";
+import { useState } from "react";
 
-export default function App(props) {
-  const Stack = createNativeStackNavigator();
+// const App2 = () => {
+//   const [task,  setTasks] = useState([
+//     {
+//       id: "1",
+//       title: "Estudar React",
+//       completed: false,
+//     },
+//     {
+//       id: "2",
+//       title: "Estudar Native Wind",
+//       completed: false,
+//     },
+//   ]);
+
+//   setTasks([])
+
+//   return (
+//     <>
+//       <View>
+//         <Tasks task={task} />
+//       </View>
+//     </>
+//   )
+
+// };
+
+// export default App2;
+
+
+export default function App() {
+  const Stack = createNativeStackNavigator();  
 
   return (
     <NavigationContainer>
@@ -38,8 +69,7 @@ export default function App(props) {
         />
         <Stack.Screen
           name="Login"
-          options={{ title: "Login",
-        headerShown: false }}
+          options={{ title: "Login", headerShown: false }}
           component={Login}
         />
       </Stack.Navigator>
