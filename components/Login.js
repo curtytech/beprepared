@@ -1,15 +1,13 @@
-import {
-  StyleSheet,
+import {  
   Text,
   TextInput,
   View,
-  TouchableOpacity,
-  Pressable,
-  AsyncStorage,
+  TouchableOpacity,  
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Home(props) {
+export default function Login(props) {
   const [display, setDisplay] = useState("hidden");
   const [user, setUser] = useState("none");
   const [login, setLogin] = useState("none");
@@ -35,19 +33,22 @@ export default function Home(props) {
       setTimeout(() => {
         setDisplay("hidden");
       }, 5000);
+      await AsyncStorage.clear();
     } else {
-      // let userData = await AsyncStorage.setItem('userData', JSON.stringify(json));
-      // let resData = await AsyncStorage.setItem('userData');
+      let userData = await AsyncStorage.setItem(
+        "userData",
+        JSON.stringify(json)
+      );
+      // let resData = await AsyncStorage.getItem("userData");
       // console.log(JSON.parse(resData));
       props.navigation.navigate("Home")
     }
   }
 
-
   return (
     <View className="flex-1 items-center justify-center bg-sky-100">
-      <Text className={`font-bold text-red-600 text-lg ${display}`}  >
-        Usuario ou Senha Inválidos 
+      <Text className={`font-bold text-red-600 text-lg ${display}`}>
+        Usuario ou Senha Inválidos
       </Text>
       <Text className="font-bold text-lg text-slate-700 pb-2 float-left">
         Email
@@ -71,10 +72,7 @@ export default function Home(props) {
 
       <View className="flex-row justify-between items-center my-3">
         <TouchableOpacity className="flex-row w-80 justify-center rounded-full bg-sky-800 p-3 mt-3">
-          <Text
-            className="text-white font-bold"
-            onPress={() => sendForm()}
-          >
+          <Text className="text-white font-bold" onPress={() => sendForm()}>
             Entrar
           </Text>
         </TouchableOpacity>

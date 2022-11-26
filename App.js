@@ -15,6 +15,7 @@ import TomorrowTasks from "./components/TomorrowTasks";
 import PastTasks from "./components/PastTasks";
 import Login from "./components/Login";
 import Tasks from "./components/Tasks";
+import Users from "./components/Users";
 import { useState } from "react";
 
 // const App2 = () => {
@@ -71,6 +72,11 @@ export default function App() {
           name="Login"
           options={{ title: "Login", headerShown: false }}
           component={Login}
+        />
+        <Stack.Screen
+          name="Users"
+          options={{ title: "Users", headerShown: false }}
+          component={Users}
         />
       </Stack.Navigator>
     </NavigationContainer>

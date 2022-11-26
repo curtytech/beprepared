@@ -19,8 +19,8 @@ app.get("/", (req, res) => {
 // });
 
 app.post("/login", async (req, res) => {
-  console.log(req);
-  console.log(res);
+  // console.log(req);
+  // console.log(res);
   let response = await user.findOne({
     where: { login: req.body.login, password: req.body.password },
   });
@@ -50,7 +50,7 @@ app.get("/read", async (req, res) => {
   //  res.send("Olhe no console!");
   res.send(read);
 
-  console.log(read);
+  // console.log(read);
 });
 
 // app.get("/update", async (req, res) => {
@@ -74,6 +74,6 @@ app.get("/read", async (req, res) => {
 
 let port = process.env.PORT || 3000;
 app.listen(port, (req, res) => {
-  console.log("rodando");
+  // console.log("rodando");
   ("up");
 });
