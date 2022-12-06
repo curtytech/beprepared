@@ -47,7 +47,7 @@ export default function Login(props) {
 
   return (
     <View className="flex-1 items-center justify-center bg-sky-100">
-      <Text className={`font-bold text-red-600 text-lg ${display}`}>
+      <Text className={`font-bold text-red-600 text-lg ${display}` }>
         Usuario ou Senha Inválidos
       </Text>
       <Text className="font-bold text-lg text-slate-700 pb-2 float-left">

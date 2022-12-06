@@ -1,10 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -14,38 +12,7 @@ import Home from "./components/Home";
 import TomorrowTasks from "./components/TomorrowTasks";
 import PastTasks from "./components/PastTasks";
 import Login from "./components/Login";
-import Tasks from "./components/Tasks";
 import Users from "./components/Users";
-import { useState } from "react";
-
-// const App2 = () => {
-//   const [task,  setTasks] = useState([
-//     {
-//       id: "1",
-//       title: "Estudar React",
-//       completed: false,
-//     },
-//     {
-//       id: "2",
-//       title: "Estudar Native Wind",
-//       completed: false,
-//     },
-//   ]);
-
-//   setTasks([])
-
-//   return (
-//     <>
-//       <View>
-//         <Tasks task={task} />
-//       </View>
-//     </>
-//   )
-
-// };
-
-// export default App2;
-
 
 export default function App() {
   const Stack = createNativeStackNavigator();  

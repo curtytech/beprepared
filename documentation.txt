@@ -27,6 +27,10 @@ npx expo install react-native-screens react-native-safe-area-context
 // Intalar Stack
 npm install @react-navigation/native-stack
 
+// React Icons
+npm install react-icons --save
+
+
 //API
 //Instalar Node express
 npm install express --save
@@ -39,6 +43,19 @@ npm install --save sequelize mysql2
 npm install --save sequelize-cli
 
 npx sequelize-cli init
+
+//Exemplo de criação de migration
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,idexample:integer,dateexample:date
+
+//Executar Migration
+npx sequelize-cli db:migrate
+
+// Exemplo de criação de seeder
+npx sequelize-cli seed:generate --name demo-user
+
+//Executar seeder
+npx sequelize-cli db:seed:all
+
 
 
 //Instalar Nodemon
