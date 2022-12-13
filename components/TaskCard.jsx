@@ -7,27 +7,33 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useEffect } from "react";
 
-export default function TaskCard({ id, description, completed }, props) {
-  const [idToEdit, setIdToEdit] = useState(null);
-  // const [descriptionToEdit, setDescriptionToEdit] = useState(null);
-
-  // function handleEdit(){
-  //   props.handleResult(idToEdit);
-  // }
-  // props.handleResult = '1';
-
-  const handleEdit = e => {
-    const test = '22'
-    props.handleResult()
+export default function TaskCard(props) {
+  // props.id = id;
+  id = props.id;
+  const [idToEdit, setIdToEdit] = useState(null);  
+  
+  props.childRef.current = {
+    value: idToEdit
   }
+ 
+  // function readTasks() {
+  //   fetch("http://192.168.0.110:3000/readTasks", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       // console.log(data);
+  //       setTasks(data);
+  //     })
+  //     .catch((err) => console.error(err));
+  // }
 
   // const TaskCard = props => {
   //   props.handleResult(idToEdit);
   // }
-
-  props = idToEdit;
-
-  // console.log(props);
 
   async function doRemove({ id }) {
     let response = await fetch("http://192.168.0.110:3000/deleteTask", {
@@ -40,14 +46,18 @@ export default function TaskCard({ id, description, completed }, props) {
         id: id,
       }),
     });
-    let json = await response.json();
-    // console.log(json);
-    if (json === "error") {
-      console.log("erro");
-    } else {
-      console.log("200");
-      // onRefresh = { onRefresh };
-    }
+    props.navigation.navigate("Users")
+    console.log(req.body+'json');
+    // let json = await response.json();
+    // console.log('json'+json);
+    // if (json === "error") {
+    //   console.log("erro");
+    // } else {
+    //   console.log("200");
+    //   // onRefresh = { onRefresh };
+    // }
+    // readTasks();
+
   }
 
   async function doCompleted({ id }) {
@@ -64,16 +74,19 @@ export default function TaskCard({ id, description, completed }, props) {
         }),
       }
     );
+    // console.log(id);
+
     let json = await response.json();
-    // console.log(json);
-    if (json === "error") {
+    console.log('json'+json);
+    if (json == "error") {
       console.log("erro");
     } else {
-      console.log("200");
-      // onRefresh = { onRefresh };
+      console.log("200");      
     }
+    // readTasks();
   }
 
+  // console.log(props.id);
   return (
     <View className="flex-row w-full my-2 items-center  grid grid-cols-3 gap-1">
       <View className="w-1/12 ">
@@ -81,7 +94,7 @@ export default function TaskCard({ id, description, completed }, props) {
           <FontAwesome
             size={20}
             onPress={() => doCompleted({ id })}
-            name={completed === true ? "check-square-o" : "window-close-o"}
+            name={props.completed === true ? "check-square-o" : "window-close-o"}
           />
         </Text>
       </View>
@@ -89,9 +102,9 @@ export default function TaskCard({ id, description, completed }, props) {
         <Text
           // onPress={() => setDescriptionToEdit({description})}
           className="text-black font-bold text-left"
-          // onPress={() => handleEdit({ id })}
+          onPress={() => setIdToEdit({ id })}
         >
-          {description}
+          {props.description}
         </Text>
       </View>
       <View className="w-1/12 ">

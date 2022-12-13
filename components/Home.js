@@ -23,10 +23,8 @@ export default function Home(props) {
   }, []);
 
   return (
-    <View className="flex-1 items-center justify-center bg-Gray-100">
-      <SafeAreaView className="flex-1 mt-5 items-center justify-center bg-gray-200 dark:bg-black dark:text-white">
+    <View className="flex-1 items-center bg-Gray-200 mt-3">
         <TodayTasks></TodayTasks>
-      </SafeAreaView>
       <View className="flex-row justify-between items-center my-1">
         <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-3 mt-5 mr-14">
           <Text
@@ -56,7 +54,7 @@ export default function Home(props) {
           </Text>
         </TouchableOpacity>
       </View>
-      <View className="flex-row justify-between items-center my-1">
+      {/* <View className="flex-row justify-between items-center my-1">
         <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-4 mt-3">
           <Text
             className="text-white font-bold"
@@ -65,7 +63,7 @@ export default function Home(props) {
             Users
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }

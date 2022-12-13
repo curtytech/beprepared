@@ -3,11 +3,11 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  RefreshControl,
   FlatList,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TaskCard from "./TaskCard";
+// import TaskService from "../services/Tasks.service";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -16,50 +16,59 @@ export default function TodayTasks() {
   const [description, setDescription] = useState(null);
   const todayDate = new Date();
   const [tasks, setTasks] = useState([]);
-  const [refresh, setRefresh] = useState(null);
+  const [result, setResult] = useState(null);
+  const childRef = useRef(null);
 
-
-  // const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-  const [result, setResult] = useState(0);
-
-  // const updateResult = (r) => {
-  //   setResult(r);
+  // console.log('asda'+childRef.current.value);
+  // let exemplo = () => {
+  //   setResult();  
   // };
-  
-  console.log(result);
 
-  if(refresh == null || refresh == false){
-    readTasks();
+  function exemplo() {
+    setResult(childRef.current.value);
+    console.log(childRef.current.value);
   }
+
+
+  // console.log('res'+result);
 
   function readTasks() {
-    useEffect(() => {
-      fetch("http://192.168.0.110:3000/readTasks", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    fetch("http://192.168.0.110:3000/readTasks", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        // console.log(data);
+        setTasks(data);
+
       })
-        .then((resp) => resp.json())
-        .then((data) => {
-          // console.log(data);
-          setTasks(data);
-        })
-        .catch((err) => console.error(err));
-    }, []);
+      .catch((err) => console.error(err));
   }
-  
+
+  useEffect(() => {
+    readTasks();
+    console.log("useEffect quando inicia");
+  }, []);
+
+  // useEffect(() => {
+  //   readTasks();
+  //   console.log("useEffect quando inicia");
+  // }, [result]);
+
   useEffect(() => {
     async function getUser() {
       let response = await AsyncStorage.getItem("userData");
       let json = JSON.parse(response);
       setUser(json.id);
-      // console.log(response);
     }
     getUser();
   }, []);
 
   async function sendForm() {
+    // setDescription('');
     let response = await fetch("http://192.168.0.110:3000/createTask", {
       method: "POST",
       headers: {
@@ -74,13 +83,17 @@ export default function TodayTasks() {
       }),
     });
     let json = await response.json();
-    // console.log(json);
+    console.log("json" + json);
     if (json === "error") {
-      // await AsyncStorage.clear();
+      console.log("err");
     } else {
-      refresh = false;
+      // console.log("foi");
+      readTasks();
+      setDescription('');
     }
   }
+  // console.log(childRef);
+
   async function sendFormEdit() {
     let response = await fetch(
       "http://192.168.0.110:3000/updateTaskCompleted",
@@ -104,6 +117,7 @@ export default function TodayTasks() {
       console.log("foi");
     }
   }
+  // console.log('result'+result);
 
   return (
     <View className="w-11/12 bg-white rounded-3xl p-2 my-5">
@@ -111,8 +125,9 @@ export default function TodayTasks() {
         <View className=" flex-row justify-between my-2">
           <TextInput
             onChangeText={(description) => setDescription(description)}
+            value={description}
             className="bg-gray-200 w-3/4 mr-1 rounded-full px-4"
-            placeholder="    Digite aqui sua nova tarefa!"
+            placeholder="Digite aqui sua nova tarefa!"
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
           <TouchableOpacity className="flex-row w-1/4  mr-2 justify-center rounded-full bg-sky-800 p-1 ">
@@ -129,13 +144,12 @@ export default function TodayTasks() {
             // onChangeText={(description) => setDescription(description)}
             className="bg-gray-200 w-3/4 mr-1 rounded-full px-4"
             value={result}
-            placeholder=""
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
           <TouchableOpacity className="flex-row w-1/4 mr-2 justify-center rounded-full bg-sky-800 p-1 ">
             <Text
               className="text-white font-bold text-xs  "
-              onPress={() => sendFormEdit()}
+              // onPress={() => exemplo()}
             >
               Editar Tarefa
             </Text>
@@ -143,13 +157,20 @@ export default function TodayTasks() {
         </View>
       </View>
       <FlatList
+        className="mt-2"
         data={tasks}
         keyExtractor={(task) => task.id}
-        renderItem={({ item }) => <TaskCard {...item} props={setResult} />}
+        onPress={() => exemplo()}
+        renderItem={({ item }) => <TaskCard {...item} childRef={childRef} />}
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}
       />
+      {/* childRef={childRef}
+      childProps={childProps.current}
+      */}
     </View>
   );
+  // 
+
 }

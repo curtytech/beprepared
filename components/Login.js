@@ -77,6 +77,13 @@ export default function Login(props) {
           </Text>
         </TouchableOpacity>
       </View>
+      <View className="flex-row justify-between items-center">
+        <TouchableOpacity className="flex-row w-80 justify-center rounded-full bg-sky-800 p-3 mt-1">
+          <Text className="text-white font-bold" onPress={() => props.navigation.navigate("Cadastrese")}>
+            Cadastre-se
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View className="flex-row justify-between items-center mt-2">
         <TouchableOpacity className="flex-row justify-center">
           <Text className="text-black font-bold">Esqueci minha senha</Text>

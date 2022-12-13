@@ -29,18 +29,42 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/createUser", async (req, res) => {
+  let searchLogin = await user.findOne({
+    where: { login: req.body.login },
+  });
+
+  console.log(searchLogin);
+
+  if (searchLogin != "") {
+    console.log("Ja existe Usuario com esse login");
+    res.send("error");
+  } else {
+    let createUser = await user.create({
+      login: req.body.login,
+      password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.login,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    res.send(createUser);
+    console.log(req.body);
+  }
+});
+
 app.post("/createTask", async (req, res) => {
   let createTask = await task.create({
     iduser: req.body.iduser,
     description: req.body.description,
     completed: 0,
-    taskdate: '2022-12-01',
+    taskdate: "2022-12-01",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
-  res.send("Registro criado com sucesso!");
-  // console.log(req.body);
-
+  res.send(createTask);
+  console.log(req.body);
 });
 
 app.get("/read", async (req, res) => {
@@ -73,31 +97,30 @@ app.get("/readTasks", async (req, res) => {
 //   res.send("Usuario editado com sucesso!");
 // });
 
-app.post("/updateTaskDescription", async (req, res) => {  
+app.post("/updateTaskDescription", async (req, res) => {
   let updateTask = await task.findByPk(req.body.id).then((response) => {
-    response.description = req.body.description
+    response.description = req.body.description;
     response.save();
   });
   res.send("Registro editado com sucesso!");
 });
 
-
-app.post("/updateTaskCompleted", async (req, res) => {  
+app.post("/updateTaskCompleted", async (req, res) => {
   let updateTask = await task.findByPk(req.body.id).then((response) => {
-
-    if (response.completed == true){
+    if (response.completed == true) {
       response.completed = false;
     } else {
       response.completed = true;
-    }    
+    }
     response.save();
   });
-  res.send("Registro editado com sucesso!");
+  // res.send("Registro editado com sucesso!");
+  // res.send(updateTask);
+  res.send(200);
+  // console.log(req.body);
 });
 
-
 app.post("/deleteTask/", async (req, res) => {
-
   let deleteTask = await task.destroy({
     where: {
       id: req.body.id,
