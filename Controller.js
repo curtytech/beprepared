@@ -114,10 +114,9 @@ app.post("/updateTaskCompleted", async (req, res) => {
     }
     response.save();
   });
-  // res.send("Registro editado com sucesso!");
-  // res.send(updateTask);
-  res.send(200);
-  // console.log(req.body);
+  // res.send('Registro editado com sucesso');
+  res.send(updateTask);
+  console.log(req.body);
 });
 
 app.post("/deleteTask/", async (req, res) => {
@@ -126,8 +125,10 @@ app.post("/deleteTask/", async (req, res) => {
       id: req.body.id,
     },
   });
-  res.send(deleteTask);
-  console.log(req.body);
+  if (deleteTask) {
+    res.send(200);
+    console.log(req.body);
+  }
   // res.send("Registro deletado com sucesso!");
 });
 

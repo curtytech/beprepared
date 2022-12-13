@@ -16,21 +16,29 @@ export default function TodayTasks() {
   const [description, setDescription] = useState(null);
   const todayDate = new Date();
   const [tasks, setTasks] = useState([]);
-  const [result, setResult] = useState(null);
+
+  // const [hideNovaTarefa, setHideNovaTarefa] = useState(null);
+  const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
+
+  //UseState para o Edit passados pelo childRef
   const childRef = useRef(null);
+  const [idToEdit, setIdToEdit] = useState(null);
+  const [descriptionToEdit, setDescriptionToEdit] = useState(null);
 
-  // console.log('asda'+childRef.current.value);
-  // let exemplo = () => {
-  //   setResult();  
-  // };
+  function pegaParametrosDoTaskCard() {
+    sethideEditTarefa('');
+    setIdToEdit('');
+    setIdToEdit(childRef.current.valueEdit);
+    setDescriptionToEdit('');
+    setDescriptionToEdit(childRef.current.description.description);
+    // setDescriptionToEdit(descriptionToEdit.description);
 
-  function exemplo() {
-    setResult(childRef.current.value);
-    console.log(childRef.current.value);
+    // console.log(childRef.current.description);
+    // let teste = descriptionToEdit.description;
+    console.log(descriptionToEdit);
+    console.log(idToEdit);    
   }
 
-
-  // console.log('res'+result);
 
   function readTasks() {
     fetch("http://192.168.0.110:3000/readTasks", {
@@ -68,7 +76,6 @@ export default function TodayTasks() {
   }, []);
 
   async function sendForm() {
-    // setDescription('');
     let response = await fetch("http://192.168.0.110:3000/createTask", {
       method: "POST",
       headers: {
@@ -89,10 +96,10 @@ export default function TodayTasks() {
     } else {
       // console.log("foi");
       readTasks();
-      setDescription('');
+      setDescriptionToEdit
+      ('');
     }
   }
-  // console.log(childRef);
 
   async function sendFormEdit() {
     let response = await fetch(
@@ -105,7 +112,7 @@ export default function TodayTasks() {
         },
         body: JSON.stringify({
           description: description,
-          id: id,
+          id: idToEdit,
         }),
       }
     );
@@ -115,9 +122,13 @@ export default function TodayTasks() {
       console.log("nao foi");
     } else {
       console.log("foi");
+      readTasks();
+      setDescription('');
+      sethideEditTarefa('hidden');
+
+
     }
   }
-  // console.log('result'+result);
 
   return (
     <View className="w-11/12 bg-white rounded-3xl p-2 my-5">
@@ -139,17 +150,16 @@ export default function TodayTasks() {
             </Text>
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-between my-2">
-          <TextInput
-            // onChangeText={(description) => setDescription(description)}
+        <View className={`flex-row justify-between my-2 ${hideEditTarefa}`}>
+          <TextInput            
+            onChangeText={(descriptionToEdit) => setDescriptionToEdit(descriptionToEdit)}
             className="bg-gray-200 w-3/4 mr-1 rounded-full px-4"
-            value={result}
+            value={descriptionToEdit}
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
           <TouchableOpacity className="flex-row w-1/4 mr-2 justify-center rounded-full bg-sky-800 p-1 ">
             <Text
               className="text-white font-bold text-xs  "
-              // onPress={() => exemplo()}
             >
               Editar Tarefa
             </Text>
@@ -159,9 +169,8 @@ export default function TodayTasks() {
       <FlatList
         className="mt-2"
         data={tasks}
-        keyExtractor={(task) => task.id}
-        onPress={() => exemplo()}
-        renderItem={({ item }) => <TaskCard {...item} childRef={childRef} />}
+        keyExtractor={(task) => task.id}        
+        renderItem={({ item }) => <TaskCard {...item} childRef={childRef} pegaParametrosDoTaskCard={pegaParametrosDoTaskCard} readTasks={readTasks} />}
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}

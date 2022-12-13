@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Button } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Entypo from "react-native-vector-icons/Entypo";
 
 import Home from "./components/Home";
 import TomorrowTasks from "./components/TomorrowTasks";
@@ -23,11 +24,8 @@ export default function App() {
           options={{
             title: "Tarefas de Hoje",
             headerRight: () => (
-              <Button
-                onPress={() => props.navigation.navigate("Users")}
-                title="Usuario"
-                color="blue"
-              />
+              <Entypo 
+              name="user" size={30} />
             ),
           }}
         />

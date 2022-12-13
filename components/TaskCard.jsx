@@ -5,35 +5,19 @@ import {
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function TaskCard(props) {
-  // props.id = id;
-  id = props.id;
-  const [idToEdit, setIdToEdit] = useState(null);  
-  
-  props.childRef.current = {
-    value: idToEdit
-  }
- 
-  // function readTasks() {
-  //   fetch("http://192.168.0.110:3000/readTasks", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       // console.log(data);
-  //       setTasks(data);
-  //     })
-  //     .catch((err) => console.error(err));
-  // }
 
-  // const TaskCard = props => {
-  //   props.handleResult(idToEdit);
-  // }
+  const [idToEdit, setIdToEdit] = useState(null);
+  const [descriptionToEdit, setDescriptionToEdit] = useState(null);
+
+  props.childRef.current = {
+    valueEdit: idToEdit,
+    description: descriptionToEdit,
+  }
+  // console.log(props.childRef.current);
+  // console.log(props);
 
   async function doRemove({ id }) {
     let response = await fetch("http://192.168.0.110:3000/deleteTask", {
@@ -46,18 +30,14 @@ export default function TaskCard(props) {
         id: id,
       }),
     });
-    props.navigation.navigate("Users")
-    console.log(req.body+'json');
-    // let json = await response.json();
-    // console.log('json'+json);
-    // if (json === "error") {
-    //   console.log("erro");
-    // } else {
-    //   console.log("200");
-    //   // onRefresh = { onRefresh };
-    // }
-    // readTasks();
-
+    let json = await response;
+    // console.log(json);
+    if (json === "error") {
+      console.log("erro");
+    } else {
+      console.log("200");
+      props.readTasks();
+    }
   }
 
   async function doCompleted({ id }) {
@@ -74,37 +54,39 @@ export default function TaskCard(props) {
         }),
       }
     );
-    // console.log(id);
+    console.log(id);    
 
-    let json = await response.json();
-    console.log('json'+json);
-    if (json == "error") {
+    let json = await response;
+    // console.log(json);    
+    if (json === "error") {
       console.log("erro");
     } else {
-      console.log("200");      
+      console.log("200");
+      props.readTasks();
     }
-    // readTasks();
   }
-
-  // console.log(props.id);
+  let id = props.id;
+  let description = props.description;
+  
   return (
     <View className="flex-row w-full my-2 items-center  grid grid-cols-3 gap-1">
       <View className="w-1/12 ">
-        <Text className="text-center">
+        <Text className="text-center">{ id }
           <FontAwesome
             size={20}
-            onPress={() => doCompleted({ id })}
+            onPress={() => { doCompleted({ id }); }}
             name={props.completed === true ? "check-square-o" : "window-close-o"}
           />
         </Text>
       </View>
       <View className="w-10/12 bg-gray-200 mr-2 rounded-full p-1 px-5 text-left">
         <Text
-          // onPress={() => setDescriptionToEdit({description})}
           className="text-black font-bold text-left"
-          onPress={() => setIdToEdit({ id })}
-        >
-          {props.description}
+          onPress={
+            () => { setIdToEdit({ id }); setDescriptionToEdit({ description }); props.pegaParametrosDoTaskCard(); }
+            // () => { setIdToEdit({ id }); }
+          }>
+          {description}
         </Text>
       </View>
       <View className="w-1/12 ">
@@ -112,11 +94,11 @@ export default function TaskCard(props) {
           <FontAwesome5
             name="trash"
             size={20}
-            onPress={() => doRemove({ id })}
+            onPress={() => { doRemove({ id }); }}
           />
         </Text>
       </View>
     </View>
-    
+
   );
 }
