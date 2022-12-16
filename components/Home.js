@@ -26,7 +26,7 @@ export default function Home(props) {
     <View className="flex-1 items-center bg-Gray-200 mt-3">
         <TodayTasks></TodayTasks>
       <View className="flex-row justify-between items-center my-1">
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-3 mt-5 mr-14">
+        <TouchableOpacity className="flex-row justify-center rounded-lg bg-sky-800 p-3 mr-14">
           <Text
             className="text-white font-bold"
             onPress={() => props.navigation.navigate("PastTasks")}
@@ -34,7 +34,7 @@ export default function Home(props) {
             Tarefas Passadas
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-3 mt-5">
+        <TouchableOpacity className="flex-row justify-center rounded-lg bg-sky-800 p-3 ">
           <Text
             className="text-white font-bold"
             onPress={() => props.navigation.navigate("TomorrowTasks")}
@@ -45,7 +45,7 @@ export default function Home(props) {
       </View>
 
       <View className="flex-row justify-between items-center my-1">
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-4 mt-3">
+        <TouchableOpacity className="flex-row justify-center rounded-lg bg-sky-800 p-3 mt-3">
           <Text
             className="text-white font-bold"
             onPress={() => props.navigation.navigate("Login")}
@@ -55,7 +55,7 @@ export default function Home(props) {
         </TouchableOpacity>
       </View>
       {/* <View className="flex-row justify-between items-center my-1">
-        <TouchableOpacity className="flex-row justify-center rounded-full bg-sky-800 p-4 mt-3">
+        <TouchableOpacity className="flex-row justify-center rounded-lg bg-sky-800 p-4 mt-3">
           <Text
             className="text-white font-bold"
             onPress={() => props.navigation.navigate("Users")}

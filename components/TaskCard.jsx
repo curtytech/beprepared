@@ -1,23 +1,15 @@
 import React from "react";
 import {
   Text,
+  StyleSheet,
   View
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState } from "react";
+import Entypo from "react-native-vector-icons/Entypo";
+// import { useState } from "react";
 
 export default function TaskCard(props) {
-
-  const [idToEdit, setIdToEdit] = useState(null);
-  const [descriptionToEdit, setDescriptionToEdit] = useState(null);
-
-  props.childRef.current = {
-    valueEdit: idToEdit,
-    description: descriptionToEdit,
-  }
-  // console.log(props.childRef.current);
-  // console.log(props);
 
   async function doRemove({ id }) {
     let response = await fetch("http://192.168.0.110:3000/deleteTask", {
@@ -54,46 +46,44 @@ export default function TaskCard(props) {
         }),
       }
     );
-    console.log(id);    
+    // console.log(id);    
 
     let json = await response;
     // console.log(json);    
     if (json === "error") {
       console.log("erro");
     } else {
-      console.log("200");
+      // console.log("200");
       props.readTasks();
     }
   }
   let id = props.id;
   let description = props.description;
-  
+
   return (
     <View className="flex-row w-full my-2 items-center  grid grid-cols-3 gap-1">
       <View className="w-1/12 ">
-        <Text className="text-center">{ id }
-          <FontAwesome
-            size={20}
-            onPress={() => { doCompleted({ id }); }}
-            name={props.completed === true ? "check-square-o" : "window-close-o"}
-          />
-        </Text>
+        <FontAwesome
+          size={25}
+          onPress={() => { doCompleted({ id }); }}
+          name={props.completed === true ? "check-square-o" : "square-o"}
+        />
       </View>
-      <View className="w-10/12 bg-gray-200 mr-2 rounded-full p-1 px-5 text-left">
+      <View className="w-10/12 border mr-2 rounded-lg p-1 px-3 text-left">
         <Text
           className="text-black font-bold text-left"
           onPress={
-            () => { setIdToEdit({ id }); setDescriptionToEdit({ description }); props.pegaParametrosDoTaskCard(); }
-            // () => { setIdToEdit({ id }); }
+            () => { props.pegaParametrosDoTaskCard(id, description); }
           }>
           {description}
         </Text>
       </View>
-      <View className="w-1/12 ">
-        <Text className="text-center">
-          <FontAwesome5
+      <View className="w-1/12 rounded-md" style={{backgroundColor: "#dc2626"}}>       
+        <Text className="text-center py-1 px-1">
+          <Entypo
+            color="#fff" 
             name="trash"
-            size={20}
+            size={22}
             onPress={() => { doRemove({ id }); }}
           />
         </Text>

@@ -87,22 +87,17 @@ app.get("/readTasks", async (req, res) => {
   // console.log(readTasks);
 });
 
-// app.get("/update", async (req, res) => {
-//   let update = await user.findByPk(2).then((response) => {
-//     response.login = "Phelipe";
-//     response.password = "12345678";
-//     response.email = "Phelipe@gamil";
-//     response.save();
-//   });
-//   res.send("Usuario editado com sucesso!");
-// });
-
 app.post("/updateTaskDescription", async (req, res) => {
+  // console.log(req.body);
+
   let updateTask = await task.findByPk(req.body.id).then((response) => {
     response.description = req.body.description;
     response.save();
   });
-  res.send("Registro editado com sucesso!");
+
+  // console.log(req.body);
+  res.send(updateTask);
+  // res.send("Registro editado com sucesso!");
 });
 
 app.post("/updateTaskCompleted", async (req, res) => {

@@ -5,7 +5,7 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import TaskCard from "./TaskCard";
 // import TaskService from "../services/Tasks.service";
 
@@ -21,22 +21,25 @@ export default function TodayTasks() {
   const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
 
   //UseState para o Edit passados pelo childRef
-  const childRef = useRef(null);
   const [idToEdit, setIdToEdit] = useState(null);
   const [descriptionToEdit, setDescriptionToEdit] = useState(null);
 
-  function pegaParametrosDoTaskCard() {
+  function pegaParametrosDoTaskCard(id, description) {
+    // console.log(id);
     sethideEditTarefa('');
-    setIdToEdit('');
-    setIdToEdit(childRef.current.valueEdit);
-    setDescriptionToEdit('');
-    setDescriptionToEdit(childRef.current.description.description);
+    // setIdToEdit('');
+    setIdToEdit(id);
+    // setIdToEdit(id);
+    // setDescriptionToEdit('');
+    setDescriptionToEdit(description);
     // setDescriptionToEdit(descriptionToEdit.description);
 
     // console.log(childRef.current.description);
     // let teste = descriptionToEdit.description;
-    console.log(descriptionToEdit);
-    console.log(idToEdit);    
+    // console.log(descriptionToEdit);
+    // console.log(idToEdit);    
+    // console.log(id); 
+    // console.log(description);
   }
 
 
@@ -76,35 +79,10 @@ export default function TodayTasks() {
   }, []);
 
   async function sendForm() {
-    let response = await fetch("http://192.168.0.110:3000/createTask", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        description: description,
-        iduser: idUser,
-        completed: 0,
-        taskdate: todayDate,
-      }),
-    });
-    let json = await response.json();
-    console.log("json" + json);
-    if (json === "error") {
-      console.log("err");
+    if (description == '') {
+      alert('Por favor digite a tarefa')
     } else {
-      // console.log("foi");
-      readTasks();
-      setDescriptionToEdit
-      ('');
-    }
-  }
-
-  async function sendFormEdit() {
-    let response = await fetch(
-      "http://192.168.0.110:3000/updateTaskCompleted",
-      {
+      let response = await fetch("http://192.168.0.110:3000/createTask", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -112,11 +90,43 @@ export default function TodayTasks() {
         },
         body: JSON.stringify({
           description: description,
+          iduser: idUser,
+          completed: 0,
+          taskdate: todayDate,
+        }),
+      });
+
+      let json = await response.json();
+      console.log("json" + json);
+      if (json === "error") {
+        console.log("err");
+      } else {
+        // console.log("foi");
+        readTasks();
+        setDescriptionToEdit('');
+        setDescription('');
+      }
+    }
+  }
+
+  async function sendFormEdit() {
+    let response = await fetch(
+      "http://192.168.0.110:3000/updateTaskDescription",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: descriptionToEdit,
           id: idToEdit,
         }),
       }
     );
-    let json = await response.json();
+    // console.log(description);
+    // console.log(idToEdit);
+    let json = await response;
     // console.log(json);
     if (json === "error") {
       console.log("nao foi");
@@ -124,24 +134,23 @@ export default function TodayTasks() {
       console.log("foi");
       readTasks();
       setDescription('');
+      setDescriptionToEdit('');
       sethideEditTarefa('hidden');
-
-
     }
   }
 
   return (
-    <View className="w-11/12 bg-white rounded-3xl p-2 my-5">
+    <View className="w-11/12 bg-white rounded-lg p-2 my-5">
       <View className=" justify-center">
         <View className=" flex-row justify-between my-2">
           <TextInput
             onChangeText={(description) => setDescription(description)}
             value={description}
-            className="bg-gray-200 w-3/4 mr-1 rounded-full px-4"
+            className="border w-3/4 mr-1 rounded-lg px-4"
             placeholder="Digite aqui sua nova tarefa!"
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
-          <TouchableOpacity className="flex-row w-1/4  mr-2 justify-center rounded-full bg-sky-800 p-1 ">
+          <TouchableOpacity className="flex-row w-1/4  mr-2 justify-center rounded-lg bg-sky-800 p-1 ">
             <Text
               className="text-white font-bold text-xs "
               onPress={() => sendForm()}
@@ -151,13 +160,15 @@ export default function TodayTasks() {
           </TouchableOpacity>
         </View>
         <View className={`flex-row justify-between my-2 ${hideEditTarefa}`}>
-          <TextInput            
+          <TextInput
             onChangeText={(descriptionToEdit) => setDescriptionToEdit(descriptionToEdit)}
-            className="bg-gray-200 w-3/4 mr-1 rounded-full px-4"
+            className="bg-gray-200 w-3/4 mr-1 rounded-lg px-4"
             value={descriptionToEdit}
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
-          <TouchableOpacity className="flex-row w-1/4 mr-2 justify-center rounded-full bg-sky-800 p-1 ">
+          <TouchableOpacity className="flex-row w-1/4 mr-2 justify-center rounded-lg bg-sky-800 p-1 "
+            onPress={() => sendFormEdit()}
+          >
             <Text
               className="text-white font-bold text-xs  "
             >
@@ -169,8 +180,8 @@ export default function TodayTasks() {
       <FlatList
         className="mt-2"
         data={tasks}
-        keyExtractor={(task) => task.id}        
-        renderItem={({ item }) => <TaskCard {...item} childRef={childRef} pegaParametrosDoTaskCard={pegaParametrosDoTaskCard} readTasks={readTasks} />}
+        keyExtractor={(task) => task.id}
+        renderItem={({ item }) => <TaskCard {...item} pegaParametrosDoTaskCard={pegaParametrosDoTaskCard} readTasks={readTasks} />}
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}

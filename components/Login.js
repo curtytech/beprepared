@@ -1,11 +1,7 @@
-import {  
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,  
-} from "react-native";
+import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function Login(props) {
   const [display, setDisplay] = useState("hidden");
@@ -41,13 +37,13 @@ export default function Login(props) {
       );
       // let resData = await AsyncStorage.getItem("userData");
       // console.log(JSON.parse(resData));
-      props.navigation.navigate("Home")
+      props.navigation.navigate("Home");
     }
   }
 
   return (
     <View className="flex-1 items-center justify-center bg-sky-100">
-      <Text className={`font-bold text-red-600 text-lg ${display}` }>
+      <Text className={`font-bold text-red-600 text-lg ${display}`}>
         Usuario ou Senha Inválidos
       </Text>
       <Text className="font-bold text-lg text-slate-700 pb-2 float-left">
@@ -71,20 +67,41 @@ export default function Login(props) {
       ></TextInput>
 
       <View className="flex-row justify-between items-center my-3">
-        <TouchableOpacity className="flex-row w-80 justify-center rounded-full bg-sky-800 p-3 mt-3">
+        <TouchableOpacity className="flex-row w-64 justify-center rounded-lg bg-sky-800 p-3 mt-3">
           <Text className="text-white font-bold" onPress={() => sendForm()}>
             Entrar
           </Text>
         </TouchableOpacity>
       </View>
       <View className="flex-row justify-between items-center">
-        <TouchableOpacity className="flex-row w-80 justify-center rounded-full bg-sky-800 p-3 mt-1">
-          <Text className="text-white font-bold" onPress={() => props.navigation.navigate("Cadastrese")}>
+        <TouchableOpacity className="flex-row w-64 justify-center rounded-lg bg-sky-800 p-3 mt-1">
+          <Text
+            className="text-white font-bold"
+            onPress={() => props.navigation.navigate("Cadastrese")}
+          >
             Cadastre-se
           </Text>
         </TouchableOpacity>
       </View>
-      <View className="flex-row justify-between items-center mt-2">
+      <View className="flex-row justify-between items-center">
+        <TouchableOpacity className="flex-row w-64 justify-center rounded-lg bg-red-600 p-3 mt-3">
+          <FontAwesome
+            size={30}
+            color={'#fff'}
+            onPress={() => {
+              doCompleted({ id });
+            }}
+            name={"google-plus-square"}
+          />
+          <Text
+            className="text-white  font-bold ml-3 py-1"
+            onPress={() => props.navigation.navigate("Cadastrese")}
+          >
+            Entrar com o google
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View className="flex-row justify-between items-center mt-4">
         <TouchableOpacity className="flex-row justify-center">
           <Text className="text-black font-bold">Esqueci minha senha</Text>
         </TouchableOpacity>
