@@ -17,6 +17,11 @@ export default function TodayTasks() {
   const todayDate = new Date();
   const [tasks, setTasks] = useState([]);
 
+  todayDate.setDate(todayDate.getDate() + 1);
+
+  console.log(todayDate);
+
+
   // const [hideNovaTarefa, setHideNovaTarefa] = useState(null);
   const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
 
@@ -44,7 +49,7 @@ export default function TodayTasks() {
 
 
   function readTasks() {
-    fetch("http://192.168.0.110:3000/readTasks", {
+    fetch("http://192.168.0.110:3000/readTomorrowTasks", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

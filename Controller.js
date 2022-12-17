@@ -87,6 +87,20 @@ app.get("/readTasks", async (req, res) => {
   // console.log(readTasks);
 });
 
+app.get("/readTomorrowTasks", async (req, res) => {
+  // var currentDate = new Date();
+  // currentDate.setDate(currentDate.getDate() + 1);
+
+  let readTasks = await task.findAll({
+    where: {
+      idUser: 1,
+      taskdate: currentDate,
+    },
+  });
+  res.send(readTasks);
+  // console.log(readTasks);
+});
+
 app.post("/updateTaskDescription", async (req, res) => {
   // console.log(req.body);
 

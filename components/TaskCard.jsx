@@ -83,7 +83,7 @@ export default function TaskCard(props) {
           <Entypo
             color="#fff" 
             name="trash"
-            size={22}
+            size={20}
             onPress={() => { doRemove({ id }); }}
           />
         </Text>
