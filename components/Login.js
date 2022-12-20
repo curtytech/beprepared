@@ -2,6 +2,7 @@ import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as AuthSession from "expo-auth-session";
 
 export default function Login(props) {
   const [display, setDisplay] = useState("hidden");
@@ -40,6 +41,27 @@ export default function Login(props) {
       props.navigation.navigate("Home");
     }
   }
+
+  // type AuthResponse = {
+  //   type: string,
+  //   params: {
+  //     access_token: string,
+  //   },
+  // };
+
+  // async function handleSingInWithGoogle() {
+  //   const CLIENT_ID =
+  //     "901813923355-u3k7kg3171l3bqtetbgepo7tfev424ga.apps.googleusercontent.com";
+  //   const REDIRECT_URI = "https://auth.expo.io/@phelipecurty/organiza";
+  //   const RESPONSE_TYPE = "token";
+  //   const SCOPE = encodeURI("profile email");
+
+  //   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
+  //   const response = await AuthSession.startAsync({ authUrl });
+  //   const {type, params} = await AuthSession;
+  //   // .startAsync({authUrl}) as AuthResponse;
+  //   console.log(response);
+  // }
 
   return (
     <View className="flex-1 items-center justify-center bg-sky-100">
@@ -87,7 +109,7 @@ export default function Login(props) {
         <TouchableOpacity className="flex-row w-64 justify-center rounded-lg bg-red-600 p-3 mt-3">
           <FontAwesome
             size={30}
-            color={'#fff'}
+            color={"#fff"}
             onPress={() => {
               doCompleted({ id });
             }}
@@ -95,7 +117,7 @@ export default function Login(props) {
           />
           <Text
             className="text-white  font-bold ml-3 py-1"
-            onPress={() => props.navigation.navigate("Cadastrese")}
+            onPress={() => handleSingInWithGoogle()}
           >
             Entrar com o google
           </Text>

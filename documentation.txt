@@ -53,6 +53,9 @@ npx sequelize-cli db:migrate
 // Exemplo de criação de seeder
 npx sequelize-cli seed:generate --name demo-user
 
+// Reveter Ultima Migrate
+npx sequelize-cli db:migrate:undo
+
 //Executar seeder
 npx sequelize-cli db:seed:all
 

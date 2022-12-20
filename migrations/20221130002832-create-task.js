@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       taskdate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,

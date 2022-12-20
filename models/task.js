@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     iduser: DataTypes.INTEGER,
     description: DataTypes.STRING,
     completed: DataTypes.BOOLEAN,
-    taskdate: DataTypes.DATE 
+    taskdate: DataTypes.DATEONLY 
   }, {
     sequelize,
     modelName: 'Task',

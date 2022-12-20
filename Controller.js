@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const models = require("./models");
 
 // const { col } = require("sequelize");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,13 +17,10 @@ app.get("/health", (req, res) => {
   res.send("Serv rodando");
 });
 
-app.post("/login", async (req, res) => {
-  // console.log(req);
-  // console.log(res);
+app.post("/login", async (req, res) => {  
   let response = await user.findOne({
     where: { login: req.body.login, password: req.body.password },
   });
-  // console.log(response);
   if (response === null) {
     res.send(JSON.stringify("error"));
   } else {
@@ -59,7 +58,7 @@ app.post("/createTask", async (req, res) => {
     iduser: req.body.iduser,
     description: req.body.description,
     completed: 0,
-    taskdate: "2022-12-01",
+    taskdate: req.body.taskdate,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -72,37 +71,22 @@ app.get("/read", async (req, res) => {
     raw: true,
   });
   res.send(read);
-
   // console.log(read);
 });
 
-app.get("/readTasks", async (req, res) => {
+app.get("/readTasks/:iduser/:taskdate", async (req, res) => {
   let readTasks = await task.findAll({
     where: {
-      idUser: 1,
-    },
-  });
-  res.send(readTasks);
-
-  // console.log(readTasks);
-});
-
-app.get("/readTomorrowTasks", async (req, res) => {
-  // var currentDate = new Date();
-  // currentDate.setDate(currentDate.getDate() + 1);
-
-  let readTasks = await task.findAll({
-    where: {
-      idUser: 1,
-      taskdate: currentDate,
+      idUser: req.params.iduser,
+      taskdate: req.params.taskdate,
     },
   });
   res.send(readTasks);
   // console.log(readTasks);
+  console.log(req.params);
 });
 
 app.post("/updateTaskDescription", async (req, res) => {
-  // console.log(req.body);
 
   let updateTask = await task.findByPk(req.body.id).then((response) => {
     response.description = req.body.description;
@@ -134,11 +118,9 @@ app.post("/deleteTask/", async (req, res) => {
       id: req.body.id,
     },
   });
-  if (deleteTask) {
-    res.send(200);
+  if (deleteTask) {    
     console.log(req.body);
-  }
-  // res.send("Registro deletado com sucesso!");
+  }  
 });
 
 let port = process.env.PORT || 3000;

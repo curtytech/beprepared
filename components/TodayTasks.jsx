@@ -16,8 +16,6 @@ export default function TodayTasks() {
   const [description, setDescription] = useState(null);
   const todayDate = new Date();
   const [tasks, setTasks] = useState([]);
-
-  // const [hideNovaTarefa, setHideNovaTarefa] = useState(null);
   const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
 
   //UseState para o Edit passados pelo childRef
@@ -34,17 +32,21 @@ export default function TodayTasks() {
     setDescriptionToEdit(description);
     // setDescriptionToEdit(descriptionToEdit.description);
 
-    // console.log(childRef.current.description);
-    // let teste = descriptionToEdit.description;
-    // console.log(descriptionToEdit);
-    // console.log(idToEdit);    
-    // console.log(id); 
-    // console.log(description);
   }
-
-
-  function readTasks() {
-    fetch("http://192.168.0.110:3000/readTasks", {
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+  function formatDate(todayDate) {
+    return [
+      todayDate.getFullYear(),
+      padTo2Digits(todayDate.getMonth() + 1),
+      padTo2Digits(todayDate.getDate()),
+    ].join('-');    
+  }
+  var dataFormatada = formatDate(todayDate);
+  
+  function readTasks() {  
+    fetch(`http://192.168.0.110:3000/readTasks/${idUser}/${dataFormatada}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +56,6 @@ export default function TodayTasks() {
       .then((data) => {
         // console.log(data);
         setTasks(data);
-
       })
       .catch((err) => console.error(err));
   }
@@ -63,11 +64,6 @@ export default function TodayTasks() {
     readTasks();
     console.log("useEffect quando inicia");
   }, []);
-
-  // useEffect(() => {
-  //   readTasks();
-  //   console.log("useEffect quando inicia");
-  // }, [result]);
 
   useEffect(() => {
     async function getUser() {
@@ -92,7 +88,7 @@ export default function TodayTasks() {
           description: description,
           iduser: idUser,
           completed: 0,
-          taskdate: todayDate,
+          taskdate: dataFormatada,
         }),
       });
 
@@ -141,6 +137,7 @@ export default function TodayTasks() {
 
   return (
     <View className="w-11/12 bg-white rounded-lg p-2 my-5">
+      {/* <Text>{todayDate}</Text> */}
       <View className=" justify-center">
         <View className=" flex-row justify-between my-2">
           <TextInput
@@ -162,7 +159,7 @@ export default function TodayTasks() {
         <View className={`flex-row justify-between my-2 ${hideEditTarefa}`}>
           <TextInput
             onChangeText={(descriptionToEdit) => setDescriptionToEdit(descriptionToEdit)}
-            className="bg-gray-200 w-3/4 mr-1 rounded-lg px-4"
+            className="border w-3/4 mr-1 rounded-lg px-4"
             value={descriptionToEdit}
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
@@ -185,7 +182,7 @@ export default function TodayTasks() {
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}
-      />   
+      />     
     </View>
   );
   // 
