@@ -1,7 +1,6 @@
 import {
   Text,
-  View,
-  TouchableOpacity,
+  View
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import UserList from "./UserList";
