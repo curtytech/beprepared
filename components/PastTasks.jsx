@@ -4,32 +4,26 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Button,
+  Platform
 } from "react-native";
 import { useState, useEffect } from "react";
 import TaskCard from "./TaskCard";
-// import TaskService from "../services/Tasks.service";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function TodayTasks() {
+export default function PastTasks() {
   const [idUser, setUser] = useState([]);
   const [description, setDescription] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
 
-  const [pastDate, setpastDate] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('empty');
 
-  const dateNeeded = new Date();
-
-  //UseState para o Edit passados pelo childRef
-  const [idToEdit, setIdToEdit] = useState(null);
-  const [descriptionToEdit, setDescriptionToEdit] = useState(null);
-
-  function pegaParametrosDoTaskCard(id, description) {
-    sethideEditTarefa('');
-    setIdToEdit(id);
-    setDescriptionToEdit(description);
-  }
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
   }
@@ -40,7 +34,38 @@ export default function TodayTasks() {
       padTo2Digits(dateNeeded.getDate()),
     ].join('-');
   }
-  var dataFormatada = formatDate(dateNeeded);
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    // let fDate = tempDate.getDay() + '-' + (tempDate.getTime() + 1) + '-' + tempDate.getFullYear();
+    // let fTime = 'Hours:' + tempDate.getHours() + 'Minutes:' + tempDate.getMinutes();
+    // setText(fDate + '\n' + fTime)
+    // console.log(fDate + '(' + fTime + ')');
+    var dataFormatada = formatDate(tempDate);
+    // console.log(dataFormatada);
+    readTasks();
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  }
+
+  //UseState para o Edit passados pelo childRef
+  const [idToEdit, setIdToEdit] = useState(null);
+  const [descriptionToEdit, setDescriptionToEdit] = useState(null);
+
+  function pegaParametrosDoTaskCard(id, description) {
+    sethideEditTarefa('');
+    setIdToEdit(id);
+    setDescriptionToEdit(description);
+  }
+
+  // var dataFormatada = formatDate(dateNeeded);
   // console.log(dataFormatada);
 
   function readTasks() {
@@ -57,11 +82,6 @@ export default function TodayTasks() {
       })
       .catch((err) => console.error(err));
   }
-
-  // useEffect(() => {
-  //   readTasks();
-  //   console.log("useEffect quando inicia");
-  // }, []);
 
   useEffect(() => {
     async function getUser() {
@@ -135,21 +155,26 @@ export default function TodayTasks() {
 
   return (
     <View className="mt-8 ml-4 w-11/12 bg-white rounded-lg p-2 ">
+
+      {show && (
+        <DateTimePicker
+          maximumDate={new Date()}
+          value={date}
+          onChange={onChangeDate}
+          display="calendar"
+          is24Hour={true}
+          mode={mode}
+          testID='dateTimePicker'
+        />)}
       <View className="justify-center">
         <View className="flex-row justify-between my-2">
-          <TextInput
-            onChangeText={(description) => setDescription(description)}
-            value={description}
-            className="border w-3/4 mr-1 rounded-lg px-4"
-            placeholder="Digite data!"
-          ></TextInput>
           <TextInput className="hidden"> </TextInput>
-          <TouchableOpacity className="flex-row w-1/4  mr-2 justify-center rounded-lg bg-sky-800 p-1 ">
+          <TouchableOpacity className="flex-row w-full mr-2 justify-center rounded-lg bg-sky-800 p-3 "
+            onPress={() => showMode('date')}>
             <Text
               className="text-white font-bold text-xs "
-              onPress={() => sendForm()}
             >
-              Enviar
+              Informe a data da Tarefa
             </Text>
           </TouchableOpacity>
         </View>
@@ -163,7 +188,7 @@ export default function TodayTasks() {
           <TextInput className="hidden"> </TextInput>
           <TouchableOpacity className="flex-row w-1/4  mr-2 justify-center rounded-lg bg-sky-800 p-1 ">
             <Text
-              className="text-white font-bold text-xs "
+              className="text-white font-bold text-xs"
               onPress={() => sendForm()}
             >
               Nova Tarefa

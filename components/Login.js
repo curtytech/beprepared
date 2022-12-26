@@ -2,7 +2,7 @@ import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import * as AuthSession from "expo-auth-session";
+// import * as AuthSession from "expo-auth-session";
 
 export default function Login(props) {
   const [display, setDisplay] = useState("hidden");

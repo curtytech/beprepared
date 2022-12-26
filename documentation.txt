@@ -72,6 +72,9 @@ npx expo install @react-native-async-storage/async-storage
 
 npm install @react-native-async-storage/async-storage
 
+// Instalar Date Picker
+npm install @react-native-community/datetimepicker --save
+
 // Iniciar projeto
 npm start
 
