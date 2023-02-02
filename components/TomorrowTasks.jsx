@@ -15,8 +15,8 @@ export default function TodayTasks() {
   const [idUser, setUser] = useState([]);
   const [description, setDescription] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [hideEditTarefa, sethideEditTarefa] = useState('hidden');
-
+  const [hideEditTarefa, sethideEditTarefa] = useState("hidden");
+  const [nextDate, setNextDate] = useState([]);
 
   const dateNeeded = new Date();
   dateNeeded.setDate(dateNeeded.getDate() + 1);
@@ -26,58 +26,60 @@ export default function TodayTasks() {
   const [descriptionToEdit, setDescriptionToEdit] = useState(null);
 
   function pegaParametrosDoTaskCard(id, description) {
-    sethideEditTarefa('');
+    sethideEditTarefa("");
     setIdToEdit(id);
     setDescriptionToEdit(description);
   }
 
   function padTo2Digits(num) {
-    return num.toString().padStart(2, '0');
+    return num.toString().padStart(2, "0");
   }
   function formatDate(dateNeeded) {
     return [
       dateNeeded.getFullYear(),
       padTo2Digits(dateNeeded.getMonth() + 1),
       padTo2Digits(dateNeeded.getDate()),
-    ].join('-');
+    ].join("-");
   }
   var dataFormatada = formatDate(dateNeeded);
   // console.log(dataFormatada);
-
-  function readTasks() {
-    fetch(`http://192.168.0.110:3000/readTasks/${idUser}/${dataFormatada}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        // console.log(data);
-        setTasks(data);
-      })
-      .catch((err) => console.error(err));
-  }
-
-  useEffect(() => {
-    readTasks();
-    console.log("useEffect quando inicia");
-  }, []);
 
   useEffect(() => {
     async function getUser() {
       let response = await AsyncStorage.getItem("userData");
       let json = JSON.parse(response);
       setUser(json.id);
+      // console.log(json);
+
     }
     getUser();
+    // readTasks();
   }, []);
 
+  function readTasks() {
+    fetch(`http://192.168.0.108:3000/readTasks/${idUser}/${dataFormatada}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((resp) => resp.json())
+    .then((data) => {setTasks(data);})
+    .catch((err) => console.error(err));
+  }
+
+  useEffect(() => {
+    readTasks();
+    // console.log("useEffect quando inicia");
+    // console.log(idUser);
+    
+  }, [idUser]);
+
   async function sendForm() {
-    if (description == '') {
-      alert('Por favor digite a tarefa')
+    if (description == "") {
+      alert("Por favor digite a tarefa");
     } else {
-      let response = await fetch("http://192.168.0.110:3000/createTask", {
+      let response = await fetch("http://192.168.0.108:3000/createTask", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -98,15 +100,15 @@ export default function TodayTasks() {
       } else {
         // console.log("foi");
         readTasks();
-        setDescriptionToEdit('');
-        setDescription('');
+        setDescriptionToEdit("");
+        setDescription("");
       }
     }
   }
 
   async function sendFormEdit() {
     let response = await fetch(
-      "http://192.168.0.110:3000/updateTaskDescription",
+      "http://192.168.0.108:3000/updateTaskDescription",
       {
         method: "POST",
         headers: {
@@ -128,14 +130,14 @@ export default function TodayTasks() {
     } else {
       // console.log("foi");
       readTasks();
-      setDescription('');
-      setDescriptionToEdit('');
-      sethideEditTarefa('hidden');
+      setDescription("");
+      setDescriptionToEdit("");
+      sethideEditTarefa("hidden");
     }
   }
 
   return (
-    <View className="mt-8 ml-4 w-11/12 bg-white rounded-lg p-2 ">      
+    <View className="mt-8 ml-4 w-11/12 bg-white rounded-lg p-2 ">
       <View className=" justify-center">
         <View className=" flex-row justify-between my-2">
           <TextInput
@@ -156,17 +158,18 @@ export default function TodayTasks() {
         </View>
         <View className={`flex-row justify-between my-2 ${hideEditTarefa}`}>
           <TextInput
-            onChangeText={(descriptionToEdit) => setDescriptionToEdit(descriptionToEdit)}
+            onChangeText={(descriptionToEdit) =>
+              setDescriptionToEdit(descriptionToEdit)
+            }
             className="border w-3/4 mr-1 rounded-lg px-4"
             value={descriptionToEdit}
           ></TextInput>
           <TextInput className="hidden"> </TextInput>
-          <TouchableOpacity className="flex-row w-1/4 mr-2 justify-center rounded-lg bg-sky-800 p-1 "
+          <TouchableOpacity
+            className="flex-row w-1/4 mr-2 justify-center rounded-lg bg-sky-800 p-1 "
             onPress={() => sendFormEdit()}
           >
-            <Text
-              className="text-white font-bold text-xs  "
-            >
+            <Text className="text-white font-bold text-xs  ">
               Editar Tarefa
             </Text>
           </TouchableOpacity>
@@ -176,13 +179,18 @@ export default function TodayTasks() {
         className="mt-2"
         data={tasks}
         keyExtractor={(task) => task.id}
-        renderItem={({ item }) => <TaskCard {...item} pegaParametrosDoTaskCard={pegaParametrosDoTaskCard} readTasks={readTasks} />}
+        renderItem={({ item }) => (
+          <TaskCard
+            {...item}
+            pegaParametrosDoTaskCard={pegaParametrosDoTaskCard}
+            readTasks={readTasks}
+          />
+        )}
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}
       />
     </View>
   );
-  // 
-
+  //
 }

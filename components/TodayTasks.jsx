@@ -46,30 +46,35 @@ export default function TodayTasks() {
   var dataFormatada = formatDate(todayDate);
   
   function readTasks() {  
-    fetch(`http://192.168.0.110:3000/readTasks/${idUser}/${dataFormatada}`, {
+    fetch(`http://192.168.0.108:3000/readTasks/${idUser}/${dataFormatada}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     })
-      .then((resp) => resp.json())
-      .then((data) => {
-        // console.log(data);
-        setTasks(data);
-      })
-      .catch((err) => console.error(err));
+    .then((resp) => resp.json())
+    .then((data) => {setTasks(data);})
+    .catch((err) => console.error(err));
+    // console.log(dataFormatada);
+    console.log(idUser);
   }
 
   useEffect(() => {
+    if(idUser == []){
+      console.log('redirecionar');
+      props.navigation.navigate("Login");
+    }
     readTasks();
-    console.log("useEffect quando inicia");
-  }, []);
+    console.log("useEffect quando inicia");    
+    // console.log(idUser);
+  }, [idUser]);
 
   useEffect(() => {
     async function getUser() {
       let response = await AsyncStorage.getItem("userData");
       let json = JSON.parse(response);
       setUser(json.id);
+      // console.log(json.id);
     }
     getUser();
   }, []);
@@ -78,7 +83,7 @@ export default function TodayTasks() {
     if (description == '') {
       alert('Por favor digite a tarefa')
     } else {
-      let response = await fetch("http://192.168.0.110:3000/createTask", {
+      let response = await fetch("http://192.168.0.108:3000/createTask", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -92,8 +97,8 @@ export default function TodayTasks() {
         }),
       });
 
-      let json = await response.json();
-      console.log("json" + json);
+      let json = await response.text();
+      // console.log("json" + json);
       if (json === "error") {
         console.log("err");
       } else {
@@ -107,7 +112,7 @@ export default function TodayTasks() {
 
   async function sendFormEdit() {
     let response = await fetch(
-      "http://192.168.0.110:3000/updateTaskDescription",
+      "http://192.168.0.108:3000/updateTaskDescription",
       {
         method: "POST",
         headers: {

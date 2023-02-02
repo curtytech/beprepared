@@ -27,7 +27,7 @@ export default function Cadastrese(props) {
 
   // Enviar From Login
   async function sendFormCadastrese() {
-    let response = await fetch("http://192.168.0.110:3000/createUser", {
+    let response = await fetch("http://192.168.0.108:3000/createUser", {
       method: "POST",
       headers: {
         Accept: "application/json",

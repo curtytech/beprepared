@@ -22,7 +22,8 @@ export default function PastTasks() {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [text, setText] = useState('empty');
+  const [chosenDateView, setChosenView] = useState("Selecione uma data");
+  const [chosenDate, setChosen] = useState(null);
 
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
@@ -34,6 +35,13 @@ export default function PastTasks() {
       padTo2Digits(dateNeeded.getDate()),
     ].join('-');
   }
+  function formatDateView(dateNeeded) {
+    return [
+      padTo2Digits(dateNeeded.getDate()),
+      padTo2Digits(dateNeeded.getMonth() + 1),
+      dateNeeded.getFullYear(),
+    ].join('/');
+  }
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -41,23 +49,27 @@ export default function PastTasks() {
     setDate(currentDate);
 
     let tempDate = new Date(currentDate);
-    // let fDate = tempDate.getDay() + '-' + (tempDate.getTime() + 1) + '-' + tempDate.getFullYear();
-    // let fTime = 'Hours:' + tempDate.getHours() + 'Minutes:' + tempDate.getMinutes();
-    // setText(fDate + '\n' + fTime)
-    // console.log(fDate + '(' + fTime + ')');
-    var dataFormatada = formatDate(tempDate);
-    // console.log(dataFormatada);
-    readTasks();
+    let dateView = "A data selecionada é: " + formatDateView(tempDate);
+
+    setChosenView(dateView);
+    setChosen(formatDate(tempDate));
+
+    // console.log(chosenDateView);
+    // console.log(chosenDate);
+
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
     setMode(currentMode);
+    setShow(true);
+    console.log(chosenDate);
+    // onChangeDate();
   }
 
   //UseState para o Edit passados pelo childRef
   const [idToEdit, setIdToEdit] = useState(null);
   const [descriptionToEdit, setDescriptionToEdit] = useState(null);
+
 
   function pegaParametrosDoTaskCard(id, description) {
     sethideEditTarefa('');
@@ -65,11 +77,8 @@ export default function PastTasks() {
     setDescriptionToEdit(description);
   }
 
-  // var dataFormatada = formatDate(dateNeeded);
-  // console.log(dataFormatada);
-
-  function readTasks() {
-    fetch(`http://192.168.0.110:3000/readTasks/${idUser}/${dataFormatada}`, {
+  async function readTasks() {
+    fetch(`http://192.168.0.108:3000/readTasks/${idUser}/${chosenDate}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -77,11 +86,22 @@ export default function PastTasks() {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        // console.log(data);
         setTasks(data);
+        // // console.log(data);
+        // if (data == '[]') {
+        //   alert("Esta data não possui registros");
+        //   // console.log('teste');
+        // } else {
+
+        // }
+
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err));   
   }
+
+  useEffect(() => {
+    readTasks();
+  }, [chosenDate]);
 
   useEffect(() => {
     async function getUser() {
@@ -96,7 +116,7 @@ export default function PastTasks() {
     if (description == '') {
       alert('Por favor digite a tarefa')
     } else {
-      let response = await fetch("http://192.168.0.110:3000/createTask", {
+      let response = await fetch("http://192.168.0.108:3000/createTask", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -106,7 +126,7 @@ export default function PastTasks() {
           description: description,
           iduser: idUser,
           completed: 0,
-          taskdate: dataFormatada,
+          taskdate: chosenDate,
         }),
       });
 
@@ -120,12 +140,12 @@ export default function PastTasks() {
         setDescriptionToEdit('');
         setDescription('');
       }
+
     }
   }
-
   async function sendFormEdit() {
     let response = await fetch(
-      "http://192.168.0.110:3000/updateTaskDescription",
+      "http://192.168.0.108:3000/updateTaskDescription",
       {
         method: "POST",
         headers: {
@@ -155,16 +175,16 @@ export default function PastTasks() {
 
   return (
     <View className="mt-8 ml-4 w-11/12 bg-white rounded-lg p-2 ">
-
       {show && (
         <DateTimePicker
+          testID='dateTimePicker'
           maximumDate={new Date()}
           value={date}
-          onChange={onChangeDate}
-          display="calendar"
-          is24Hour={true}
           mode={mode}
-          testID='dateTimePicker'
+          is24Hour={true}
+          display="calendar"
+          onChange={onChangeDate}
+
         />)}
       <View className="justify-center">
         <View className="flex-row justify-between my-2">
@@ -174,8 +194,7 @@ export default function PastTasks() {
             <Text
               className="text-white font-bold text-xs "
             >
-              Informe a data da Tarefa
-            </Text>
+              {chosenDateView}            </Text>
           </TouchableOpacity>
         </View>
         <View className="flex-row justify-between my-2">

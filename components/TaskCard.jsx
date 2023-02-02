@@ -12,15 +12,15 @@ import Entypo from "react-native-vector-icons/Entypo";
 export default function TaskCard(props) {
 
   async function doRemove({ id }) {
-    let response = await fetch("http://192.168.0.110:3000/deleteTask", {
-      method: "POST",
+    console.log(id);
+    let response = await fetch(`http://192.168.0.108:3000/deleteTask/${id}`, {
+      method: "GET",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        id: id,
-      }),
+      // body: JSON.stringify({
+      //   id: id,
+      // }),
     });
     let json = await response;
     // console.log(json);
@@ -34,7 +34,7 @@ export default function TaskCard(props) {
 
   async function doCompleted({ id }) {
     let response = await fetch(
-      "http://192.168.0.110:3000/updateTaskCompleted",
+      "http://192.168.0.108:3000/updateTaskCompleted",
       {
         method: "POST",
         headers: {

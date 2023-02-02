@@ -17,14 +17,39 @@ app.get("/health", (req, res) => {
   res.send("Serv rodando");
 });
 
-app.post("/login", async (req, res) => {  
+app.post("/login", async (req, res) => {
   let response = await user.findOne({
-    where: { login: req.body.login, password: req.body.password },
+    where: { email: req.body.email, password: req.body.password },
   });
   if (response === null) {
     res.send(JSON.stringify("error"));
   } else {
     res.send(response);
+  }
+});
+
+app.post("/loginGoogle", async (req, res) => {
+  let response = await user.findOne({
+    where: { idGoogle: req.body.idGoogle },
+  });
+  if (response === null) {
+    // res.send(JSON.stringify("salvar dados do google"));
+    // Não tem cad google no banco
+    let createUserGoogle = await user.create({
+      idGoogle: req.body.idGoogle,
+      login: req.body.name,
+      firstName: req.body.given_name,
+      lastName: req.body.family_name,
+      email: req.body.emailGoogle,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    res.send(createUserGoogle);
+    // console.log(req.body);
+  } else {
+    res.send(response);
+    console.log('ja tem cad google pode entrar');
+
   }
 });
 
@@ -44,7 +69,7 @@ app.post("/createUser", async (req, res) => {
       password: req.body.password,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      email: req.body.login,
+      email: req.body.email,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -83,11 +108,10 @@ app.get("/readTasks/:iduser/:taskdate", async (req, res) => {
   });
   res.send(readTasks);
   // console.log(readTasks);
-  console.log(req.params);
+  // console.log(req.params);
 });
 
 app.post("/updateTaskDescription", async (req, res) => {
-
   let updateTask = await task.findByPk(req.body.id).then((response) => {
     response.description = req.body.description;
     response.save();
@@ -112,19 +136,27 @@ app.post("/updateTaskCompleted", async (req, res) => {
   console.log(req.body);
 });
 
-app.post("/deleteTask/", async (req, res) => {
+app.get("/deleteTask/:id", async (req, res) => {
   let deleteTask = await task.destroy({
     where: {
-      id: req.body.id,
+      id: req.params.id,
     },
   });
-  if (deleteTask) {    
-    console.log(req.body);
-  }  
+  // console.log(req.params);
+  res.send(200);
 });
 
 let port = process.env.PORT || 3000;
 app.listen(port, (req, res) => {
   // console.log("rodando");
   ("up");
+});
+
+app.get("/readUser/:idUser", async (req, res) => {
+
+  let readUser = await user.findByPk(req.params.idUser);
+  // console.log(readUser);
+
+  res.send(readUser);  
+  // console.log(req.params);
 });

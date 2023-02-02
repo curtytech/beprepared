@@ -1,8 +1,17 @@
+// To run
+npx nodemon run Controller.js
+npm start 
+Start Apache e Mysql e Android Studio
+
+
 Link do Tutorial de instalação do nativewind
 https://www.nativewind.dev/quick-starts/expo
 
 Criar projeto
 npx create-expo-app beprepared
+
+//Instalar Yarn
+npm install --global yarn
 
 // Instalar NativeWind -- não funciona no powershell
 yarn add nativewind
@@ -78,4 +87,9 @@ npm install @react-native-community/datetimepicker --save
 // Iniciar projeto
 npm start
 
+// Terminal pediu para instalar Fase de Teste
+npx expo install expo-auth-session@~3.8.0
 
+//Login Google
+//npx expo install expo-auth-session expo-random
+npx expo install @react-native-google-signin/google-signin

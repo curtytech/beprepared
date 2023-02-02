@@ -24,6 +24,12 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
+      idGoogle: {
+        type: Sequelize.STRING
+      },
+      picture: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

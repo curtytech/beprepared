@@ -2,7 +2,7 @@ import React from "react";
 
 export default function TaskService() {
   function readTasks() {
-    fetch("http://192.168.0.110:3000/readTasks", {
+    fetch("http://192.168.0.108:3000/readTasks", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
