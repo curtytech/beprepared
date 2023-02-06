@@ -37,10 +37,11 @@ app.post("/loginGoogle", async (req, res) => {
     // Não tem cad google no banco
     let createUserGoogle = await user.create({
       idGoogle: req.body.idGoogle,
-      login: req.body.name,
-      firstName: req.body.given_name,
-      lastName: req.body.family_name,
+      login: req.body.nameGoogle,
+      firstName: req.body.given_nameGoogle,
+      lastName: req.body.family_nameGoogle,
       email: req.body.emailGoogle,
+      picture: req.body.pictureGoogle,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -48,6 +49,7 @@ app.post("/loginGoogle", async (req, res) => {
     // console.log(req.body);
   } else {
     res.send(response);
+    console.log(response);
     console.log('ja tem cad google pode entrar');
 
   }

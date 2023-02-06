@@ -23,8 +23,8 @@ export default function Login(props) {
         password: password,
       }),
     });
-    console.log(email)
-    console.log(password)
+    // console.log(email);
+    // console.log(password);
     let json = await response.json();
     // console.log(json);
     if (json === "error") {
@@ -44,10 +44,7 @@ export default function Login(props) {
     }
   }
 
-  async function loginGoogle() {
-   
-  }
-
+  async function loginGoogle() {}
 
   async function handleSingInWithGoogle() {
     const CLIENT_ID =
@@ -66,46 +63,51 @@ export default function Login(props) {
       // const user = await responseTwo.text();
       const googleUser = await responseTwo.json();
 
-      // console.log(googleUser);
       // navigation.navigate('Profile', {token: params.access_token});
       // navigation.navigate("Home", {googleUser: googleUser});
       // if()
+      let googleUserId = googleUser.id;
+      let googleUserEmail = googleUser.email;
+      let googleUserFamily_name = googleUser.family_name;
+      let googleUserGiven_name = googleUser.given_name;
+      let googleUserName = googleUser.name;
+      let googleUserPicture = googleUser.picture;
 
-      let response = await fetch("http://192.168.0.108:3000/loginGoogle", {
+      let responseThree = await fetch("http://192.168.0.108:3000/loginGoogle", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          idGoogle: googleUser.id,
-          emailGoogle: googleUser.email,
-          family_nameGoogle: googleUser.family_name,
-          given_nameGoogle: googleUser.given_name,
-          nameGoogle: googleUser.name,
-          pictureGoogle: googleUser.picture,
+          idGoogle: googleUserId,
+          emailGoogle: googleUserEmail,
+          family_nameGoogle: googleUserFamily_name,
+          given_nameGoogle: googleUserGiven_name,
+          nameGoogle: googleUserName,
+          pictureGoogle: googleUserPicture,
         }),
       });
-      
-      let json = await response.json();
+      // console.log(responseThree);
+
+      let json = await responseThree.json();
       // console.log(json);
       if (json === "error") {
-        setDisplay("");
-        setTimeout(() => {
-          setDisplay("hidden");
-        }, 5000);
+        // setDisplay("");
+        // setTimeout(() => {
+        //   setDisplay("hidden");
+        // }, 5000);
         await AsyncStorage.clear();
       } else {
         let userData = await AsyncStorage.setItem(
           "userData",
           JSON.stringify(json)
         );
-        // let resData = await AsyncStorage.getItem("userData");
+        let resData = await AsyncStorage.getItem("userData");
         // console.log(JSON.parse(resData));
-        // props.navigation.navigate("Home");
+        props.navigation.navigate("Home");
       }
     }
-
   }
 
   return (
@@ -151,19 +153,12 @@ export default function Login(props) {
         </TouchableOpacity>
       </View>
       <View className="flex-row justify-between items-center">
-        <TouchableOpacity className="flex-row w-64 justify-center rounded-lg bg-red-600 p-3 mt-3">
-          <FontAwesome
-            size={30}
-            color={"#fff"}
-            onPress={() => {
-              doCompleted({ id });
-            }}
-            name={"google-plus-square"}
-          />
-          <Text
-            className="text-white  font-bold ml-3 py-1"
-            onPress={() => handleSingInWithGoogle()}
-          >
+        <TouchableOpacity
+          className="flex-row w-64 justify-center rounded-lg bg-red-600 p-3 mt-3"
+          onPress={() => handleSingInWithGoogle()}
+        >
+          <FontAwesome size={30} color={"#fff"} name={"google-plus-square"} />
+          <Text className="text-white  font-bold ml-3 py-1">
             Entrar com o google
           </Text>
         </TouchableOpacity>

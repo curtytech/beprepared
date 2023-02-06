@@ -64,9 +64,8 @@ export default function TodayTasks() {
       console.log('redirecionar');
       props.navigation.navigate("Login");
     }
-    readTasks();
-    console.log("useEffect quando inicia");    
-    // console.log(idUser);
+    readTasks();    
+    console.log(idUser);
   }, [idUser]);
 
   useEffect(() => {
